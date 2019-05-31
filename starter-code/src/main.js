@@ -52,7 +52,6 @@ function createCards(cardDeck) {//funcion con parametro 'cardDeck' que sera el v
     //creamos la parte back que esta dentro de la carta
     let cartaback = document.createElement('div');//creamos elemento que ira dentro del anterior div
     cartaback.setAttribute('class', `back ${e.name.replace(" ", "")}`)//añadimos clase con el nombre de la carta y la clase 'back'
-    cartaback.setAttribute('style', `background-color: #456783 ;`)//añadimos los estilos de la carta en este caso 'bacground-color...'  para tapar la imagen
     cartaback.addEventListener('click', showTile);//añadimos el evento click asociado a este elemento
     carta.appendChild(cartaback); //añadimos el elemento 'back' a la carta 'card'
     board.appendChild(carta); //añadimos carta al board    
