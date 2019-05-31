@@ -111,35 +111,37 @@ function addCardCoupleArray(card) {
       if (counterPairs.innerText === '12') memoryGame.finished();//Si completamos las 12 parejas invocamos el metodo 'finished' del objeto 'memoryGame' y acabamos la partida
     }
     else {// si no hemos acertado la pareja
-      let card1 = (coupleCards[0].split(' ')); //de la 1ª carta hacemos una coleccion de sus clases para elegir la correspondiente a su personaje
-      let card2 = (coupleCards[1].split(' ')); //lo mismo que con la 1ª carta
-      let backCards = document.getElementsByClassName('back'); //seleccionamos los div de la clase 'back'
-      /// 'forEach' mode
-      var cardsArr = [].slice.call(backCards);//convertimos la coleccion 'backCards' en array
-      cardsArr.forEach(e => {//bloqueamos añadiendo la clase 'bloqued' a todas las cartas 'back' para no poder hacer click mientras se ejecuta el timeout
-        e.classList.add('blocked');
-      });
-      /// 'for' mode
-      /* for (let i = 0; i < backCards.length; i++) {//bloqueamos añadiendo la clase 'bloqued' todas las cartas 'back' para no poder hacer click mientras se ejecuta el timeout
-         backCards[i].classList.add('blocked');
-       }*/
-      setTimeout(() => { //dejamos un tiempo (1s) antes de ocultar las cartas de nuevo
-        hideTile(card1[1]); //llamamos a la funcion para ocultar la 1ª carta
-        hideTile(card2[1]); //llamamos a la funcion para ocultar la 2ª carta
-        /// 'forEach' mode
-        cardsArr.forEach(e => {// desbloqueamos todas las cartas 'back' quitandole la clase 'bloqued'
-          e.classList.remove('blocked');
-        });
-        /// 'for' mode
-        /*for (let i = 0; i < backCards.length; i++) {// desbloqueamos todas las cartas 'back' quitandole la clase 'bloqued'
-            backCards[i].classList.remove('blocked');
-          }*/
-      }, 1000);
-      console.log('Loooooser')
+      turnCards(coupleCards);
     }
     coupleCards = []// vaciamos el array de 2
   }
 }
-
+function turnCards(cards) {
+  let card1 = (cards[0].split(' ')); //de la 1ª carta hacemos una coleccion de sus clases para elegir la correspondiente a su personaje
+  let card2 = (cards[1].split(' ')); //lo mismo que con la 1ª carta
+  let backCards = document.getElementsByClassName('back'); //seleccionamos los elementos de la clase 'back'
+  /// 'forEach' mode
+  var cardsArr = [].slice.call(backCards);//convertimos la coleccion 'backCards' en array
+  cardsArr.forEach(e => {//bloqueamos añadiendo la clase 'bloqued' a todos los elementos 'back' para no poder hacer click mientras se ejecuta el 'setTimeout'
+    e.classList.add('blocked');
+  });
+  /// 'for' mode
+  /* for (let i = 0; i < backCards.length; i++) {//bloqueamos añadiendo la clase 'bloqued' todas las cartas 'back' para no poder hacer click mientras se ejecuta el 'setTimeout'
+     backCards[i].classList.add('blocked');
+   }*/
+  setTimeout(() => { //dejamos un tiempo (1s) antes de ocultar las cartas de nuevo
+    hideTile(card1[1]); //llamamos a la funcion para ocultar la 1ª carta
+    hideTile(card2[1]); //llamamos a la funcion para ocultar la 2ª carta
+    /// 'forEach' mode
+    cardsArr.forEach(e => {// desbloqueamos todos los elementos 'back' quitandoles la clase 'bloqued'
+      e.classList.remove('blocked');
+    });
+    /// 'for' mode
+    /*for (let i = 0; i < backCards.length; i++) {// desbloqueamos todos los elementos 'back' quitandoles la clase 'bloqued'
+        backCards[i].classList.remove('blocked');
+      }*/
+  }, 1000);
+  console.log('Loooooser')
+}
 
 
