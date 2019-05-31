@@ -25,16 +25,16 @@ let cards = [
   { name: "thor", img: "thor.jpg" }
 ];
 let memoryGame; //inicializamos el objeto donde almacenaremos la clase MemoryGame
-let coupleCards = []; //inicializamos el array de 2 cartas para comparar
+let coupleCards = []; //inicializamos la coleccion de 2 cartas para comparar
 let counterPairs = document.getElementById('pairs_guessed'); //inicializamos el contador de parejas acertadas
-let counterPairsClicked = document.getElementById('pairs_clicked'); //inicializamos el contador de parejas
+let counterPairsClicked = document.getElementById('pairs_clicked'); //inicializamos el contador de parejas probadas
 
 addEventListener("load", () => {
   memoryGame = new MemoryGame(cards); //creamos un nuevo objeto de la clase MemoryGame 
   let html = ""; //definimos el nuevo contenido del board
   // Add all the div's to the HTML
   document.getElementById("memory_board").innerHTML = html;//borramos el contenido del board
-  createCards(memoryGame.shuffleCard(cards)); //invocamos la funcion pata crear las cartas. Pasamos el metodo 'shuffleCard(cards)' del objeto creado 'memoryGame' como parametro que nos devolvera las cartas barajadas
+  createCards(memoryGame.shuffleCard(cards)); //invocamos la funcion para crear las cartas. Pasamos el metodo 'shuffleCard(cards)' del objeto creado 'memoryGame' como parametro que nos devolvera las cartas barajadas
   // Bind the click event of each element to a function
   /*[].slice.call(document.getElementsByClassName("back")).forEach(element => {
     element.addEventListener("click", () => {});
@@ -42,10 +42,10 @@ addEventListener("load", () => {
 
 });
 
-function createCards(cardDeck) {//funcion con parametro 'cardDeck' que sera el valor asignado en la invocacion de la funcion (en este caso 'memoryGame.cards')
+function createCards(cardDeck) {//funcion con parametro 'cardDeck' que sera el valor del parametro asignado en la invocacion de la funcion (en este caso 'memoryGame.cards')
   let board = document.getElementById('memory_board');
   /// 'forEach' mode
-  cardDeck.forEach(e => { //por cada elemento 'e' del array 'cardDeck' creamos una carta (padre) con su back (hijo)
+  cardDeck.forEach(e => { //por cada elemento 'e' del array 'cardDeck' creamos una carta 'card' (padre) con su 'back' (hijo)
     //creamos carta 
     let carta = document.createElement('div');//creamos elemento
     carta.setAttribute('style', `background-image:url("./img/${e.img}"); `);//añadimos los estilos de la carta en este caso 'bacground-image...'
@@ -55,7 +55,7 @@ function createCards(cardDeck) {//funcion con parametro 'cardDeck' que sera el v
     cartaback.setAttribute('class', `back ${e.name.replace(" ", "")}`)//añadimos clase con el nombre de la carta y la clase 'back'
     cartaback.addEventListener('click', showTile);//añadimos el evento click asociado a este elemento
     carta.appendChild(cartaback); //añadimos el elemento 'back' a la carta 'card'
-    board.appendChild(carta); //añadimos carta al board    
+    board.appendChild(carta); //añadimos carta al 'board'    
   });
   /// 'for' mode
   /*for (let index = 0; index < cardDeck.length; index++) {
@@ -68,54 +68,55 @@ function createCards(cardDeck) {//funcion con parametro 'cardDeck' que sera el v
     cartaback.setAttribute('class', `back ${cardDeck[index].name.replace(" ", "")}`)//añadimos clase con el nombre de la carta y la clase 'back'
     cartaback.addEventListener('click', showTile);//añadimos el evento click asociado a este elemento
     carta.appendChild(cartaback); //añadimos el elemento 'back' a la carta 'card'
-    board.appendChild(carta); //añadimos carta al board 
+    board.appendChild(carta); //añadimos carta al 'board' 
   }*/
 }
 //funcion que nos muestra la imagen de la carta seleccionada
 function showTile(e) {
-  e.target.setAttribute('style', 'background:inherit;');//el evento click coge su elemento ('target') y le añade atributos de estilo 'inherit' para heredar los estilos del padre 'card' y coger en herencia el 'background-image' del padre
+  e.target.setAttribute('style', 'background:inherit;');//el evento 'click' coge ('target') su elemento 'back' y le añade atributos de estilo 'inherit' para heredar los estilos del padre 'card' y coger por herencia el 'background-image' del padre
   //console.log(e.target.getAttribute('class'));
   e.target.classList.add('front', 'blocked');//añadimos las clases al elemento
 
-  addCardCoupleArray(e.target.classList);//añadimos la carta al array de 2 para comparar la pareja
+  addCardCoupleArray(e.target.classList);//añadimos la carta a la coleccion de 2 para comparar la pareja
 }
-//funcion para ocultar las cartas
+//funcion para ocultar las cartas no emparejadas
 function hideTile(className) {
-  let cardsBack = document.getElementsByClassName(className); //hacemos un array de objetos con la clase del personaje
+  let cardsBack = document.getElementsByClassName(className); //hacemos una coleccion de elementos con la clase del personaje
   /// 'forEach' mode
   var cardsArr = [].slice.call(cardsBack);//convertimos la coleccion 'cardsBack' en array
   cardsArr.forEach(e => {
-    if (e.getAttribute('class').indexOf('back') > -1) { //si en sus clases contiene la clase back, correpondiente al objeto que oculta la imagen
-      e.setAttribute('style', ``); //suprimimos el estilo asignado previamente 'background:inherit'
+    if (e.getAttribute('class').indexOf('back') > -1) { //si en sus clases contiene la clase 'back' que corresponde al elemento que oculta la imagen...
+      e.setAttribute('style', ``); //...suprimimos el estilo asignado previamente 'background:inherit'
       e.classList.remove('blocked'); //desbloqueamos la carta
     }
 
   });
   /// 'for' mode
   /*for (let index = 0; index < cardsBack.length; index++) { //por cada uno de ellos
-    if (cardsBack[index].getAttribute('class').indexOf('back') > -1) { //si en sus clases contiene la clase back, correpondiente al objeto que oculta la imagen
-      cardsBack[index].setAttribute('style', ``); //suprimimos el estilo asignado previamente 'background:inherit'
+    if (cardsBack[index].getAttribute('class').indexOf('back') > -1) { //si en sus clases contiene la clase 'back' que corresponde al elemento que oculta la imagen...
+      cardsBack[index].setAttribute('style', ``); //...suprimimos el estilo asignado previamente 'background:inherit'
       cardsBack[index].classList.remove('blocked'); //desbloqueamos la carta
     }
   }*/
 }
 
-//funcion que añade carta al array de 2 para comparar
+//funcion que añade carta a la coleccion de 2 para comparar
 function addCardCoupleArray(card) {
-  coupleCards.push(`${card}`); //añadimos carta al array de 2
-  if (coupleCards.length === 2) {//si el array ya tiene 2 cartas compara
-    if (memoryGame.checkIfPair(coupleCards[0], coupleCards[1])) {//el metodo checkIfPair devuelve true si son pareja y false si no. El if se da si el metodo devuelve true
+  coupleCards.push(`${card}`); //añadimos carta a la coleccion de 2
+  if (coupleCards.length === 2) {//si la coleccion ya tiene 2 cartas las compara
+    counterPairsClicked.innerText = parseInt(counterPairsClicked.innerText) + 1;// añadimos un punto al marcador de parejas probadas
+    if (memoryGame.checkIfPair(coupleCards[0], coupleCards[1])) {//el metodo checkIfPair devuelve 'true' si son pareja y 'false' si no. El 'if' se da si el metodo devuelve 'true'
       console.log(`U'r awesome!!`);
       counterPairs.innerText = parseInt(counterPairs.innerText) + 1;//añadimos un punto al marcador de parejas acertadas
-      if (counterPairs.innerText === '12') memoryGame.finished();//Si completamos las 12 parejas
+      if (counterPairs.innerText === '12') memoryGame.finished();//Si completamos las 12 parejas invocamos el metodo 'finished' del objeto 'memoryGame' y acabamos la partida
     }
     else {// si no hemos acertado la pareja
-      let card1 = (coupleCards[0].split(' ')); //de la carta 1 hacemos un array de sus clases para elegir la correspondiente a su personaje
-      let card2 = (coupleCards[1].split(' ')); //lo mismo que con la 1 carta
-      let backCards = document.getElementsByClassName('back'); //seleccionamos las cartas 'back'
+      let card1 = (coupleCards[0].split(' ')); //de la 1ª carta hacemos una coleccion de sus clases para elegir la correspondiente a su personaje
+      let card2 = (coupleCards[1].split(' ')); //lo mismo que con la 1ª carta
+      let backCards = document.getElementsByClassName('back'); //seleccionamos los div de la clase 'back'
       /// 'forEach' mode
       var cardsArr = [].slice.call(backCards);//convertimos la coleccion 'backCards' en array
-      cardsArr.forEach(e => {//bloqueamos añadiendo la clase 'bloqued' todas las cartas 'back' para no poder hacer click mientras se ejecuta el timeout
+      cardsArr.forEach(e => {//bloqueamos añadiendo la clase 'bloqued' a todas las cartas 'back' para no poder hacer click mientras se ejecuta el timeout
         e.classList.add('blocked');
       });
       /// 'for' mode
@@ -136,9 +137,9 @@ function addCardCoupleArray(card) {
       }, 1000);
       console.log('Loooooser')
     }
-    counterPairsClicked.innerText = parseInt(counterPairsClicked.innerText) + 1;//añadimos un punto al marcador de parejas
-    coupleCards = []//vaciamos el array de 2
+    coupleCards = []// vaciamos el array de 2
   }
 }
+
 
 

@@ -4,7 +4,7 @@ class MemoryGame {
   };
 
   shuffleCard(cardsArr) {// recibe un array de cartas y devuelve otro con las cartas barajadas
-    let shuffled = [];
+    let shuffled = []; // definimos el array de cartas barajadas
     /// 'forEach' mode
     cardsArr.forEach(e => {// Cada carta de 'cardsArr' la añadimos al nuevo array de cartas 'shuffled' en una posicion aleatoria
       shuffled.splice(Math.floor(Math.random() * (shuffled.length + 1)), 0, e);
@@ -15,13 +15,10 @@ class MemoryGame {
     }*/
     return shuffled;
   };
-
   checkIfPair(firstCard, secondCard) { // comprueba si las dos cartas son iguales y devuelve true o false
     if (firstCard === secondCard) {
-      console.log("you win")
       return true;
     } else {
-      console.log("you lose");
       return false;
     }
   }
