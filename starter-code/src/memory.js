@@ -3,17 +3,21 @@ class MemoryGame {
     this.cards = cards;
   };
 
-  shuffleCard(cardsArr) {
+  shuffleCard(cardsArr) {// recibe un mazo de cartas y devuelve otro con las cartas barajadas
       let shuffled=[];
-      cardsArr.forEach(e => {
+      /// 'forEach' mode
+      cardsArr.forEach(e => {// Cada carta de 'cardsArr' la añadimos al nuevo array de cartas 'shuffled' en una posicion aleatoria
         shuffled.splice(Math.floor(Math.random()*shuffled.length),0,e);
       });
+      /// 'for' mode
+      /*for (let i = 0; i < cardsArr.length; i++) {// Cada carta de 'cardsArr' la añadimos al nuevo array de cartas 'shuffled' en una posicion aleatoria
+        shuffled.splice(Math.floor(Math.random()*shuffled.length),0,cardsArr[i]);
+      }*/
       return shuffled;
   };
 
-  checkIfPair(firstCard, secondCard) {
+  checkIfPair(firstCard, secondCard) { // comprueba si las dos cartas son iguales y devuelve true o false
     if (firstCard === secondCard) {
-      //console.log(firstCard)
       console.log("you win")
       return true;
     } else {
@@ -23,6 +27,6 @@ class MemoryGame {
   }
   finished() {
     alert(`U'r the Fuking Master`);
-    window.location.reload(false); 
+    window.location.reload(false); // recarga la pagina del cache
   };
 }

@@ -44,6 +44,7 @@ addEventListener("load", () => {
 
 function createCards(cardDeck) {//funcion con parametro 'cardDeck' que sera el valor asignado en la invocacion de la funcion (en este caso 'memoryGame.cards')
   let board = document.getElementById('memory_board');
+  /// 'forEach' mode
   cardDeck.forEach(e => { //por cada elemento 'e' del array 'cardDeck' creamos una carta (padre) con su back (hijo)
     //creamos carta 
     let carta = document.createElement('div');//creamos elemento
@@ -56,6 +57,19 @@ function createCards(cardDeck) {//funcion con parametro 'cardDeck' que sera el v
     carta.appendChild(cartaback); //añadimos el elemento 'back' a la carta 'card'
     board.appendChild(carta); //añadimos carta al board    
   });
+  /// 'for' mode
+  /*for (let index = 0; index < cardDeck.length; index++) {
+    //creamos carta 
+    let carta = document.createElement('div');//creamos elemento
+    carta.setAttribute('style', `background-image:url("./img/${cardDeck[index].img}"); `);//añadimos los estilos de la carta en este caso 'bacground-image...'
+    carta.setAttribute('class', `card ${cardDeck[index].name.replace(" ", "")}`);//añadimos clase con el nombre de la carta y la clase 'card'
+    //creamos la parte back que esta dentro de la carta
+    let cartaback = document.createElement('div');//creamos elemento que ira dentro del anterior div
+    cartaback.setAttribute('class', `back ${cardDeck[index].name.replace(" ", "")}`)//añadimos clase con el nombre de la carta y la clase 'back'
+    cartaback.addEventListener('click', showTile);//añadimos el evento click asociado a este elemento
+    carta.appendChild(cartaback); //añadimos el elemento 'back' a la carta 'card'
+    board.appendChild(carta); //añadimos carta al board 
+  }*/
 }
 //funcion que nos muestra la imagen de la carta seleccionada
 function showTile(e) {
@@ -68,12 +82,22 @@ function showTile(e) {
 //funcion para ocultar las cartas
 function hideTile(className) {
   let cardsBack = document.getElementsByClassName(className); //hacemos un array de objetos con la clase del personaje
-  for (let index = 0; index < cardsBack.length; index++) { //por cada uno de ellos
+  /// 'forEach' mode
+  var cardsArr = [].slice.call(cardsBack);//convertimos la coleccion 'cardsBack' en array
+  cardsArr.forEach(e => {
+    if (e.getAttribute('class').indexOf('back') > -1) { //si en sus clases contiene la clase back, correpondiente al objeto que oculta la imagen
+      e.setAttribute('style', ``); //suprimimos el estilo asignado previamente 'background:inherit'
+      e.classList.remove('blocked'); //desbloqueamos la carta
+    }
+
+  });
+  /// 'for' mode
+  /*for (let index = 0; index < cardsBack.length; index++) { //por cada uno de ellos
     if (cardsBack[index].getAttribute('class').indexOf('back') > -1) { //si en sus clases contiene la clase back, correpondiente al objeto que oculta la imagen
       cardsBack[index].setAttribute('style', ``); //suprimimos el estilo asignado previamente 'background:inherit'
       cardsBack[index].classList.remove('blocked'); //desbloqueamos la carta
     }
-  }
+  }*/
 }
 
 //funcion que añade carta al array de 2 para comparar
@@ -89,17 +113,27 @@ function addCardCoupleArray(card) {
       let card1 = (coupleCards[0].split(' ')); //de la carta 1 hacemos un array de sus clases para elegir la correspondiente a su personaje
       let card2 = (coupleCards[1].split(' ')); //lo mismo que con la 1 carta
       let backCards = document.getElementsByClassName('back'); //seleccionamos las cartas 'back'
-      for (let i = 0; i < backCards.length; i++) {//bloqueamos añadiendo la clase 'bloqued' todas las cartas 'back' para no poder hacer click mientras se ejecuta el timeout
-        backCards[i].classList.add('blocked');
-      }
+      /// 'forEach' mode
+      var cardsArr = [].slice.call(backCards);//convertimos la coleccion 'backCards' en array
+      cardsArr.forEach(e => {//bloqueamos añadiendo la clase 'bloqued' todas las cartas 'back' para no poder hacer click mientras se ejecuta el timeout
+        e.classList.add('blocked');
+      });
+      /// 'for' mode
+      /* for (let i = 0; i < backCards.length; i++) {//bloqueamos añadiendo la clase 'bloqued' todas las cartas 'back' para no poder hacer click mientras se ejecuta el timeout
+         backCards[i].classList.add('blocked');
+       }*/
       setTimeout(() => { //dejamos un tiempo (1s) antes de ocultar las cartas de nuevo
         hideTile(card1[1]); //llamamos a la funcion para ocultar la 1ª carta
         hideTile(card2[1]); //llamamos a la funcion para ocultar la 2ª carta
-        for (let i = 0; i < backCards.length; i++) {// desbloqueamos todas las cartas 'back' quitandole la clase 'bloqued'
-          backCards[i].classList.remove('blocked');
-        }
+        /// 'forEach' mode
+        cardsArr.forEach(e => {// desbloqueamos todas las cartas 'back' quitandole la clase 'bloqued'
+          e.classList.remove('blocked');
+        });
+        /// 'for' mode
+        /*for (let i = 0; i < backCards.length; i++) {// desbloqueamos todas las cartas 'back' quitandole la clase 'bloqued'
+            backCards[i].classList.remove('blocked');
+          }*/
       }, 1000);
-
       console.log('Loooooser')
     }
     counterPairsClicked.innerText = parseInt(counterPairsClicked.innerText) + 1;//añadimos un punto al marcador de parejas
