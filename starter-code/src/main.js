@@ -27,6 +27,20 @@ var cards = [
 
 addEventListener("load", () => {
   let memoryGame = new MemoryGame(cards);
+ 
+  let html = memoryGame.init();
+
+  // Add all the div's to the HTML
+  document.getElementById("memory_board").innerHTML = html;
+  // Bind the click event of each element to a function
+  [].slice.call(document.getElementsByClassName("back")).forEach(element => {
+    element.addEventListener("click", () => {memoryGame.clickCard(element)});
+  });
+
+});
+/*
+addEventListener("load", () => {
+  let memoryGame = new MemoryGame(cards);
   let html = "";
 
   // Add all the div's to the HTML
@@ -37,3 +51,4 @@ addEventListener("load", () => {
   });
 
 });
+*/
