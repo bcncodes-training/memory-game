@@ -2,8 +2,8 @@ class MemoryGame {
     constructor(cards) {
     this.cards = cards;
     this.pickedCards = [];
-    this.pairsClicked = 0;
-    this.pairsGuessed = 0;
+    this.pairsClicked;
+    this.pairsGuessed;
     };
 
     init() {
@@ -11,7 +11,13 @@ class MemoryGame {
         let HtmlFinal = "";
         let html = "";
         let url,styleTxt;
+        let y = 0;
 
+        this.pairsClicked = 0;
+        this.pairsGuessed = 0;
+        document.getElementById('pairs_clicked').innerHTML = this.pairsClicked;
+        document.getElementById('pairs_guessed').innerHTML = this.pairsGuessed;
+        
         this.cards = this.shuffleCard(this.cards);
 
         this.cards.forEach(function(carta){
@@ -30,33 +36,42 @@ class MemoryGame {
           element.setAttribute('id', 'casilla'+y);
           html = element.outerHTML;
           HtmlFinal+= html + '</div>'
+          y++;
         });
-        return HtmlFinal;
+
+        document.getElementById("memory_board").innerHTML = HtmlFinal;
+        [].slice.call(document.getElementsByClassName("back")).forEach(element => {
+            element.addEventListener("click", () => {this.clickCard(element)});
+          });
     }
 
     clickCard(e) {
         let contenedor = document.getElementById(e.id);
         let id = e.id;
         // Solo entramos si la casilla está boca abajo
-        if(contenedor.outerHTML.indexOf('background-image:inherit')<0) {
+        if(contenedor.outerHTML.indexOf('blocked')<0 && this.pickedCards.length<2) {
             id = parseInt(id.replace('casilla',''));
             contenedor.setAttribute('style', 'background-image:inherit;');
+            contenedor.setAttribute('class','back blocked');
             this.pickedCards.push(id);
             if(this.pickedCards.length == 2) {
                 // Entra la segunda Carta
-                if(this.checkIfPair(this.cards[this.pickedCards[0]],this.cards[this.pickedCards[1]])) {
-                    // Son Iguales
-                    alert('Son Iguales');
-                } else {
+                if(!this.checkIfPair(this.cards[this.pickedCards[0]],this.cards[this.pickedCards[1]])) {
                     // No son iguales
-                    alert('No son Iguales');
                     // Volvemos a poner las cartas boca abajo
-                    contenedor.removeAttribute('style');
-                    contenedor = document.getElementById('casilla'+this.pickedCards[0]);
-                    contenedor.removeAttribute('style');
+                    setTimeout(() => {
+                        contenedor.removeAttribute('style');
+                        contenedor.setAttribute('class','back');
+                        contenedor = document.getElementById('casilla'+this.pickedCards[0]);
+                        contenedor.removeAttribute('style');
+                        contenedor.setAttribute('class','back');
+                        // Vaciamos el array pickedCards
+                        this.pickedCards.length = [];               
+                    }, 1000);    
+                } else {
+                    // Vaciamos el array pickedCards
+                    this.pickedCards.length = [];               
                 }
-                // Vaciamos el array pickedCards
-                this.pickedCards.length = 0;
                 // El juego termina si llegamos a 12 en pairsGuessed
                 if(this.pairsGuessed==12)
                     this.finished();
@@ -91,7 +106,7 @@ class MemoryGame {
 
     finished() {
         alert("¡¡¡¡ LO CONSEGUISTE!!!");
-        // Borramos el Html construido
-        
+        // Relanzamos el juego
+        this.init();
     };
 }
