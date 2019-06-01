@@ -105,7 +105,7 @@ class MemoryGame {
     }
 
     finished() {
-        alert("¡¡¡¡ LO CONSEGUISTE!!!");
+        alert("¡¡¡¡ LO CONSEGUISTE !!!!");
         // Relanzamos el juego
         this.init();
     };
