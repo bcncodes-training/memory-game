@@ -25,21 +25,22 @@ let cards = [
   { name: 'thor', img: 'thor.jpg' }
 ];
 
-let memoryGame;
-let pickedPair = [];
+let memoryGame, container, pairs_clicked, pairs_guessed;
 
 addEventListener('load', () => {
+  pairs_clicked = document.getElementById('pairs_clicked');
+  pairs_guessed = document.getElementById('pairs_guessed');
   memoryGame = new MemoryGame(cards);
   let suffledCards = memoryGame.shuffleCard();
 
-  let container = document.getElementById('memory_board');
-
   // Add all the div's to the HTML
   suffledCards.forEach(card => {
+    container = document.getElementById('memory_board');
     // External DIV
     let image_path = `url('img/${card.img}')`;
     let div_ext = document.createElement('div');
-    div_ext.className = 'card ' + card.name;
+    div_ext.className = 'card ';
+    div_ext.setAttribute('data-name', card.name);
     div_ext.style.backgroundImage = image_path;
     // Internal DIV
     let div_int = document.createElement('div');
@@ -57,31 +58,46 @@ addEventListener('load', () => {
 });
 
 function turnCardUp(e) {
-  if (pickedPair.length < 2) {
+  let card = e.target;
+  if (memoryGame.pickedCards.length < 2) {
     if (!e.target.classList.contains('turn')) {
       e.target.classList.add('turn');
-      pickedPair.push(e.target);
+      memoryGame.pickedCards.push(card);
       // If there are two cards selected
-      if (pickedPair.length === 2) {
-        setTimeout(function() {
-          memoryGame.incrementChecked;
-          let firstCard = pickedPair[0].classList.remove('card');
-          let SecondCard = pickedPair[1].classList.remove('card');
-          if (firstCard === SecondCard) {
-            memoryGame.incrementGuessed;
-            //pickedPair[0].parentNode.classList.add('blocked');
-            //pickedPair[1].parentNode.classList.add('blocked');
+      if (memoryGame.pickedCards.length === 2) {
+        setTimeout(() => {
+          let card1 = memoryGame.pickedCards[0];
+          let card1Name = card1.parentNode.dataset.name;
+          let card2 = memoryGame.pickedCards[1];
+          let card2Name = card2.parentNode.dataset.name;
+          if (memoryGame.checkIfPair(card1Name, card2Name)) {
+            blockCard(card1);
+            blockCard(card2);
           } else {
-            turnCardDown(pickedPair[0]);
-            turnCardDown(pickedPair[1]);
+            turnCardDown(card1);
+            turnCardDown(card2);
           }
-          pickedPair = [];
-        }, 2000);
+          memoryGame.pickedCards = [];
+          updateScore();
+          if(memoryGame.finished()){
+            alert("Game finished !!")
+          }
+        }, 1000);
       }
     }
   }
 }
 
 function turnCardDown(card) {
-  if (card.classList.contains('turn')) card.classList.remove('turn');
+  card.classList.remove('turn');
+}
+
+function blockCard(card) {
+  card.classList.add('blocked');
+}
+
+function updateScore() {
+  console.log('Ejecutándose updateScore...');
+  pairs_clicked.innerHTML = '' + memoryGame.pairsClicked;
+  pairs_guessed.innerHTML = '' + memoryGame.pairsGuessed;
 }

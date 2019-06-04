@@ -1,37 +1,44 @@
 class MemoryGame {
   constructor(cards) {
     this.cards = cards;
+    this.pickedCards = [];
     this.pairsClicked = 0;
     this.pairsGuessed = 0;
   }
 
   shuffleCard() {
-    let m = cards.length,
+    let newCards = this.cards.slice();
+
+    let m = newCards.length,
       t,
       i;
 
-    // While there remain elements to shuffle…
+    // Mientras haya cartas que barajar…
     while (m) {
-      // Pick a remaining element…
+      // Elige un elemento restante…
       i = Math.floor(Math.random() * m--);
 
-      // And swap it with the current element.
-      t = cards[m];
-      cards[m] = cards[i];
-      cards[i] = t;
+      // y lo intercambia con el elemento actual.
+      t = newCards[m];
+      newCards[m] = newCards[i];
+      newCards[i] = t;
     }
 
-    return cards;
+    return newCards;
   }
 
-  incrementChecked() {
-    this.pairsClicked++;
-  }
-  incrementGuessed() {
-    this.pairsGuessed++;
+  checkIfPair(firstCard, secondCard) {
+    let arePair = false;
+    if (firstCard === secondCard) {
+      this.pairsGuessed += 1;
+      arePair = true;
+    }
+    this.pairsClicked += 1;
+    return arePair;
   }
 
-  checkIfPair(firstCard, secondCard) {}
-
-  finished() {}
+  finished() {
+    if(this.pairsGuessed === 0) return false;
+    return (this.cards.length / 2) == this.pairsGuessed;
+  }
 }
